@@ -4,7 +4,9 @@
 
 import Foundation
 
-class Base10NumberSystem: NumberSystem {
+class Base10NumberSystem: LexoNumberSystem {
+    static var instance: LexoNumberSystem = Base10NumberSystem()
+
     let name: String = "Base10"
     let base: UInt8 = 10
     let radixPointChar: Character = ":"
@@ -12,20 +14,20 @@ class Base10NumberSystem: NumberSystem {
 
     func toDigit(_ char: Character) throws -> UInt8 {
         guard char.isASCII, let ascii = char.asciiValue else {
-            throw NumberSystemError.invalidChar(char: char, numberSystemName: name)
+            throw LexoNumberSystemError.invalidChar(char: char, numberSystemName: name)
         }
 
         switch ascii {
             case 48...57:
                 return ascii - 48
             default:
-                throw NumberSystemError.invalidChar(char: char, numberSystemName: name)
+                throw LexoNumberSystemError.invalidChar(char: char, numberSystemName: name)
         }
     }
 
     func toChar(_ digit: UInt8) throws -> Character {
         guard digit < characters.count else {
-            throw NumberSystemError.invalidDigit(digit: digit, numberSystemName: name)
+            throw LexoNumberSystemError.invalidDigit(digit: digit, numberSystemName: name)
         }
 
         return characters[Int(digit)]

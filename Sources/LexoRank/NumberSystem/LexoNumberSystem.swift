@@ -4,12 +4,14 @@
 
 import Foundation
 
-enum NumberSystemError: Error {
+enum LexoNumberSystemError: Error {
     case invalidDigit(digit: UInt8, numberSystemName: String)
     case invalidChar(char: Character, numberSystemName: String)
 }
 
-protocol NumberSystem {
+protocol LexoNumberSystem {
+    static var instance: LexoNumberSystem { get }
+
     var name: String { get }
     var base: UInt8 { get }
     var characters: [Character] { get }
