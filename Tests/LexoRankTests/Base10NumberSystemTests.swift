@@ -9,6 +9,10 @@ class Base10NumberSystemTests: XCTestCase {
     
     let sut = Base10NumberSystem()
 
+    func test_charCount_isEqualToBase() {
+        XCTAssertEqual(sut.characters.count, Int(sut.base))
+    }
+
     func test_charsInRange_shouldReturnDigit() {
         XCTAssertEqual(try sut.toDigit("0"), 0)
         XCTAssertEqual(try sut.toDigit("1"), 1)

@@ -4,11 +4,11 @@
 
 import Foundation
 
-class Base10NumberSystem: NumberSystem {
-    let name: String = "Base10"
-    let base: UInt8 = 10
+class Base36NumberSystem: NumberSystem {
+    let name: String = "Base36"
+    let base: UInt8 = 36
     let radixPointChar: Character = ":"
-    let characters: [Character] = Array("0123456789")
+    let characters: [Character] = Array("0123456789abcdefghijklmnopqrstuvwxyz")
 
     func toDigit(_ char: Character) throws -> UInt8 {
         guard char.isASCII, let ascii = char.asciiValue else {
@@ -18,6 +18,8 @@ class Base10NumberSystem: NumberSystem {
         switch ascii {
             case 48...57:
                 return ascii - 48
+            case 97...122:
+                return ascii - 97 + 10; //+ 10 is to digit values
             default:
                 throw NumberSystemError.invalidChar(char: char, numberSystemName: name)
         }

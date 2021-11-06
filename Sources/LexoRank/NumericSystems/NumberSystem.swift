@@ -12,6 +12,7 @@ enum NumberSystemError: Error {
 protocol NumberSystem {
     var name: String { get }
     var base: UInt8 { get }
+    var characters: [Character] { get }
 
     var radixPointChar: Character { get }
 
