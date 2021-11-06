@@ -1,3 +1,3 @@
-struct LexoRank {
-    var text = "Hello, World!"
+class LexoRank {
+
 }
