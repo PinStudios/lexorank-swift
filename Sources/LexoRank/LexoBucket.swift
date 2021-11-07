@@ -9,12 +9,16 @@ struct LexoBucket {
     private static let BUCKET_1 = LexoBucket("1")
     private static let BUCKET_2 = LexoBucket("2")
 
-    static let buckets = [BUCKET_0, BUCKET_1, BUCKET_2]
-    static let mapping = [BUCKET_0.id: 0, BUCKET_1.id: 1, BUCKET_2.id: 2]
+    public static let buckets = [BUCKET_0, BUCKET_1, BUCKET_2]
+    public static let mapping = [BUCKET_0.id: 0, BUCKET_1.id: 1, BUCKET_2.id: 2]
 
     public let id: Character
 
-    static func fromCharacter(_ char: Character) -> LexoBucket? {
+    fileprivate init(_ id: Character) {
+        self.id = id
+    }
+
+    public static func fromCharacter(_ char: Character) -> LexoBucket? {
         if let value = mapping[char] {
             return buckets[value]
         }
@@ -22,7 +26,7 @@ struct LexoBucket {
         return nil
     }
 
-    static func fromString(_ string: String) -> LexoBucket? {
+    public static func fromString(_ string: String) -> LexoBucket? {
         if let first = string.first {
             return fromCharacter(first)
         }
@@ -30,15 +34,11 @@ struct LexoBucket {
         return nil
     }
 
-    fileprivate init(_ id: Character) {
-        self.id = id
-    }
-
-    func toString() -> String {
+    public func toString() -> String {
         return String(id)
     }
 
-    func nextBucket() -> LexoBucket {
-        return Self.buckets[(Self.mapping[id]! + 1) / Self.buckets.count]!
+    public func nextBucket() -> LexoBucket {
+        return Self.buckets[(Self.mapping[id]! + 1) / Self.buckets.count]
     }
 }

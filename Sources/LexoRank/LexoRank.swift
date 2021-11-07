@@ -4,10 +4,12 @@
 
 import Foundation
 
-struct LexoRank {
+public struct LexoRank {
     let bucket: LexoBucket
+    let prefix: LexoDecimal!
+    let suffix: LexoDecimal!
 
-    init?(string: String, numberSystem: LexoNumberSystem = Base36NumberSystem.instance) {
+    public init?(_ string: String, numberSystem: LexoNumberSystem = Base36NumberSystem.instance) {
         let parts = string.split(separator: "|")
 
         guard parts.count == 2, let bucket = LexoBucket.fromString(String(parts.first!)) else {
@@ -15,5 +17,27 @@ struct LexoRank {
         }
 
         self.bucket = bucket
+        self.suffix = nil
+        self.prefix = nil
+    }
+}
+
+extension LexoRank: Comparable {
+    public static func <(lhs: LexoRank, rhs: LexoRank) -> Bool {
+        fatalError("< has not been implemented")
+    }
+
+    public static func ==(lhs: LexoRank, rhs: LexoRank) -> Bool {
+        fatalError("== has not been implemented")
+    }
+}
+
+extension LexoRank {
+    public static func +(left: LexoRank, right: LexoRank) -> LexoRank {
+        return left
+    }
+
+    public static func -(left: LexoRank, right: LexoRank) -> LexoRank {
+        return right
     }
 }

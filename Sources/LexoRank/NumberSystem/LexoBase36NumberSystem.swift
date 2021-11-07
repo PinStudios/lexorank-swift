@@ -4,15 +4,15 @@
 
 import Foundation
 
-class Base36NumberSystem: LexoNumberSystem {
-    static var instance: LexoNumberSystem = Base36NumberSystem()
+public class Base36NumberSystem: LexoNumberSystem {
+    public static var instance: LexoNumberSystem = Base36NumberSystem()
 
-    let name: String = "Base36"
-    let base: UInt8 = 36
-    let radixPointChar: Character = ":"
-    let characters: [Character] = Array("0123456789abcdefghijklmnopqrstuvwxyz")
+    public let name: String = "Base36"
+    public let base: UInt8 = 36
+    public let radixPointChar: Character = ":"
+    public let characters: [Character] = Array("0123456789abcdefghijklmnopqrstuvwxyz")
 
-    func toDigit(_ char: Character) throws -> UInt8 {
+    public func toDigit(_ char: Character) throws -> UInt8 {
         guard char.isASCII, let ascii = char.asciiValue else {
             throw LexoNumberSystemError.invalidChar(char: char, numberSystemName: name)
         }
@@ -27,7 +27,7 @@ class Base36NumberSystem: LexoNumberSystem {
         }
     }
 
-    func toChar(_ digit: UInt8) throws -> Character {
+    public func toChar(_ digit: UInt8) throws -> Character {
         guard digit < characters.count else {
             throw LexoNumberSystemError.invalidDigit(digit: digit, numberSystemName: name)
         }
