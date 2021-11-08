@@ -67,16 +67,18 @@ public struct LexoDecimal {
         var over: UInt8 = 0
         var value: UInt8 = 0
 
-        //if there's nothing to halve
-        guard let bool = try? self > stepDecimal(step: 1), bool == true else {
-            return nil
-        }
+        var halved = false
 
         var newCharacters = Array<Character>(repeating: numberSystem.min, count: scale)
 
         do {
-            for i in stride(from: 0, through: scale - 1, by: 1) {
+            for i in stride(from: 0, to: scale, by: 1) {
                 value = try (over * numberSystem.base) + numberSystem.toDigit(characters[i])
+
+                //this is used to track that number being halved is bigger than 1 and results in a number bigger than 0
+                if value > 1 {
+                    halved = true
+                }
 
                 over = value % 2
                 value = value / 2
@@ -85,6 +87,10 @@ public struct LexoDecimal {
             }
 
             newCharacters.insert(numberSystem.radixPointChar, at: baseScale)
+
+            if !halved {
+                return nil
+            }
 
             return try LexoDecimal(String(newCharacters), numberSystemType: numberSystemType)
         } catch {
@@ -108,7 +114,7 @@ public struct LexoDecimal {
         if let half = try? (scaleMatched.rhs - scaleMatched.lhs).halved() {
             return try scaleMatched.lhs + half
         } else {
-            return try LexoDecimal(string.appending(String(numberSystem.mid)), numberSystemType: numberSystemType)
+            return try LexoDecimal(scaleMatched.lhs.string.appending(String(numberSystem.mid)), numberSystemType: numberSystemType)
         }
     }
 
