@@ -123,6 +123,14 @@ extension LexoRank {
     public static func ==(lhs: LexoRank, rhs: LexoRank) throws -> Bool {
         return try lhs.decimal == rhs.decimal
     }
+
+    public static func >(lhs: LexoRank, rhs: LexoRank) throws -> Bool {
+        return try lhs.decimal > rhs.decimal
+    }
+
+    public static func !=(lhs: LexoRank, rhs: LexoRank) throws -> Bool {
+        return try lhs.decimal != rhs.decimal
+    }
 }
 
 extension LexoRank: CustomStringConvertible {
