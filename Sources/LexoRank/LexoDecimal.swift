@@ -6,9 +6,9 @@ import Foundation
 
 public struct LexoDecimal {
 
-    public var numberSystemType: LexoNumberSystemType
-    public var string: String
-    public var baseScale: Int
+    private(set) public var numberSystemType: LexoNumberSystemType
+    private(set) public var string: String
+    private(set) public var baseScale: Int
 
     var characters: [Character]
 
@@ -91,7 +91,6 @@ public struct LexoDecimal {
             return nil
         }
 
-        return nil
     }
 
     func between(other: LexoDecimal) throws -> LexoDecimal {
@@ -106,7 +105,7 @@ public struct LexoDecimal {
         let scaleMatched = self.matchScale(other: other, sorted: true)
 
         //if it's possible to halve the difference, return smaller decimal + half, otherwise append mid char
-        if let half = try! (scaleMatched.rhs - scaleMatched.rhs).halved() {
+        if let half = try? (scaleMatched.rhs - scaleMatched.lhs).halved() {
             return try scaleMatched.lhs + half
         } else {
             return try LexoDecimal(string.appending(String(numberSystem.mid)), numberSystemType: numberSystemType)
@@ -114,11 +113,19 @@ public struct LexoDecimal {
     }
 
     func next(step: UInt8) throws -> LexoDecimal {
-        return try (self + stepDecimal(step: step))
+        do {
+            return try (self + stepDecimal(step: step))
+        } catch {
+            throw LexoRankError.bucketOverflow
+        }
     }
 
     func prev(step: UInt8) throws -> LexoDecimal {
-        return try (self - stepDecimal(step: step))
+        do {
+            return try (self - stepDecimal(step: step))
+        } catch {
+            throw LexoRankError.bucketOverflow
+        }
     }
 
     func stepDecimal(step: UInt8) throws -> LexoDecimal {
@@ -155,7 +162,7 @@ public struct LexoDecimal {
 }
 
 extension LexoDecimal {
-    public static func -(lhs: LexoDecimal, rhs: LexoDecimal) throws -> LexoDecimal {
+    static func -(lhs: LexoDecimal, rhs: LexoDecimal) throws -> LexoDecimal {
         guard lhs.baseScale == rhs.baseScale else {
             throw LexoRankError.baseScaleMismatch
         }
@@ -188,7 +195,7 @@ extension LexoDecimal {
         }
 
         if over > 0 {
-            throw LexoRankError.bucketOverflow
+            throw LexoRankError.decimalOverflow
         }
 
         newCharacters.insert(numberSystem.radixPointChar, at: lhs.baseScale)
@@ -196,7 +203,7 @@ extension LexoDecimal {
         return try LexoDecimal(String(newCharacters), numberSystemType: lhs.numberSystemType)
     }
 
-    public static func +(lhs: LexoDecimal, rhs: LexoDecimal) throws -> LexoDecimal {
+    static func +(lhs: LexoDecimal, rhs: LexoDecimal) throws -> LexoDecimal {
         guard lhs.baseScale == rhs.baseScale else {
             throw LexoRankError.baseScaleMismatch
         }
@@ -226,7 +233,7 @@ extension LexoDecimal {
         }
 
         if over > 0 {
-            throw LexoRankError.bucketOverflow
+            throw LexoRankError.decimalOverflow
         }
 
         newCharacters.insert(numberSystem.radixPointChar, at: lhs.baseScale)
@@ -234,7 +241,7 @@ extension LexoDecimal {
         return try LexoDecimal(String(newCharacters), numberSystemType: lhs.numberSystemType)
     }
 
-    public static func <(lhs: LexoDecimal, rhs: LexoDecimal) throws -> Bool {
+    static func <(lhs: LexoDecimal, rhs: LexoDecimal) throws -> Bool {
         guard lhs.baseScale == rhs.baseScale else {
             throw LexoRankError.baseScaleMismatch
         }
@@ -248,7 +255,7 @@ extension LexoDecimal {
         return scaleMatched.lhs.string < scaleMatched.rhs.string
     }
 
-    public static func >(lhs: LexoDecimal, rhs: LexoDecimal) throws -> Bool {
+    static func >(lhs: LexoDecimal, rhs: LexoDecimal) throws -> Bool {
         guard lhs.baseScale == rhs.baseScale else {
             throw LexoRankError.baseScaleMismatch
         }
@@ -262,7 +269,7 @@ extension LexoDecimal {
         return scaleMatched.lhs.string > scaleMatched.rhs.string
     }
 
-    public static func ==(lhs: LexoDecimal, rhs: LexoDecimal) throws -> Bool {
+    static func ==(lhs: LexoDecimal, rhs: LexoDecimal) throws -> Bool {
         guard lhs.baseScale == rhs.baseScale else {
             throw LexoRankError.baseScaleMismatch
         }
@@ -276,7 +283,7 @@ extension LexoDecimal {
         return scaleMatched.lhs.string == scaleMatched.rhs.string
     }
 
-    public static func !=(lhs: LexoDecimal, rhs: LexoDecimal) throws -> Bool {
+    static func !=(lhs: LexoDecimal, rhs: LexoDecimal) throws -> Bool {
         guard lhs.baseScale == rhs.baseScale else {
             throw LexoRankError.baseScaleMismatch
         }
