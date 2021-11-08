@@ -16,6 +16,8 @@ class LexoBase36NumberSystem: LexoNumberSystem {
     let radixPointChar: Character = ":"
     let characters: [Character] = Array("0123456789abcdefghijklmnopqrstuvwxyz")
 
+    // This could use built in UInt(string:radix:), but performance test should be used to determine
+    // more efficient option between the two.
     func toDigit(_ char: Character) throws -> UInt8 {
         guard char.isASCII, let ascii = char.asciiValue else {
             throw LexoRankError.invalidNumberSystemChar(char: char, numberSystemName: name)
@@ -31,6 +33,8 @@ class LexoBase36NumberSystem: LexoNumberSystem {
         }
     }
 
+    // This could use built in String(int:radix:), but performance test should be used to determine
+    // more efficient option between the two.
     func toChar(_ digit: UInt8) throws -> Character {
         guard digit < characters.count else {
             throw LexoRankError.invalidNumberSystemDigit(digit: digit, numberSystemName: name)

@@ -38,6 +38,8 @@ protocol LexoNumberSystem {
     func toInt(_ string: String) -> UInt?
 }
 
+// If someone will ever decide to add base62 or base64 number systems, these methods need
+// to be reimplemented for those systems.
 extension LexoNumberSystem {
 
     func toString(_ int: UInt) -> [Character] {
