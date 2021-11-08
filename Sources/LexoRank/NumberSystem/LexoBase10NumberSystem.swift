@@ -4,30 +4,34 @@
 
 import Foundation
 
-public class Base10NumberSystem: LexoNumberSystem {
-    public static var instance: LexoNumberSystem = Base10NumberSystem()
+class LexoBase10NumberSystem: LexoNumberSystem {
+    static var instance: LexoNumberSystem = LexoBase10NumberSystem()
 
-    public let name: String = "Base10"
-    public let base: UInt8 = 10
-    public let radixPointChar: Character = ":"
-    public let characters: [Character] = Array("0123456789")
+    var min: Character = "0"
+    var mid: Character = "5"
+    var max: Character = "9"
 
-    public func toDigit(_ char: Character) throws -> UInt8 {
+    let name: String = "Base10"
+    let base: UInt8 = 10
+    let radixPointChar: Character = ":"
+    let characters: [Character] = Array("0123456789")
+
+    func toDigit(_ char: Character) throws -> UInt8 {
         guard char.isASCII, let ascii = char.asciiValue else {
-            throw LexoNumberSystemError.invalidChar(char: char, numberSystemName: name)
+            throw LexoRankError.invalidNumberSystemChar(char: char, numberSystemName: name)
         }
 
         switch ascii {
             case 48...57:
                 return ascii - 48
             default:
-                throw LexoNumberSystemError.invalidChar(char: char, numberSystemName: name)
+                throw LexoRankError.invalidNumberSystemChar(char: char, numberSystemName: name)
         }
     }
 
-    public func toChar(_ digit: UInt8) throws -> Character {
+    func toChar(_ digit: UInt8) throws -> Character {
         guard digit < characters.count else {
-            throw LexoNumberSystemError.invalidDigit(digit: digit, numberSystemName: name)
+            throw LexoRankError.invalidNumberSystemDigit(digit: digit, numberSystemName: name)
         }
 
         return characters[Int(digit)]

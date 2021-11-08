@@ -7,7 +7,7 @@ import XCTest
 
 class Base36NumberSystemTests: XCTestCase {
     
-    let sut = Base36NumberSystem()
+    let sut = LexoBase36NumberSystem()
 
     func test_charCount_isEqualToBase() {
         XCTAssertEqual(sut.characters.count, Int(sut.base))
