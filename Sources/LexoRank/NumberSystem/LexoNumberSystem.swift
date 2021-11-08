@@ -33,6 +33,7 @@ protocol LexoNumberSystem {
 
     func toDigit(_ char: Character) throws -> UInt8
     func toChar(_ digit: UInt8) throws -> Character
+
     func toString(_ int: UInt) -> [Character]
     func toInt(_ string: String) -> UInt?
 }

@@ -7,6 +7,8 @@ import Foundation
 public enum LexoRankError: Error, CustomDebugStringConvertible, CustomStringConvertible {
     case unknownError
 
+    case decimalOverflow
+    
     case bucketMissing
     case bucketOverflow
     case bucketMismatch
@@ -24,6 +26,8 @@ public enum LexoRankError: Error, CustomDebugStringConvertible, CustomStringConv
 
     public var description: String {
         switch self {
+            case .decimalOverflow:
+                return "Resulting decimal is overflowing memory boundaries - this can happen either because resulting value is negative number, or requires baseScale resize to fit"
             case .unknownError:
                 return "This should never happen, if this happened, please debug and file a github issue."
             case .bucketMissing:
@@ -50,20 +54,20 @@ extension LexoRank {
     static let MIN_BASE_SCALE = 6
     static let MAX_BASE_SCALE = 10
 
-    public static func first(bucket: LexoBucket = LexoBucket.BUCKET_0, baseScale: Int = 6, numberSystemType: LexoNumberSystemType = .base36) throws -> LexoRank {
+    public static func first(bucket: LexoBucketType = .bucket0, baseScale: Int = 6, numberSystemType: LexoNumberSystemType = .base36) throws -> LexoRank {
         let minString = String(Array<Character>(repeating: numberSystemType.numberSystem.min, count: baseScale))
         let maxString = String(Array<Character>(repeating: numberSystemType.numberSystem.max, count: baseScale))
 
-        let min = LexoRank(bucket: bucket, decimal: try LexoDecimal(minString, numberSystemType: numberSystemType))
-        let max = LexoRank(bucket: bucket, decimal: try LexoDecimal(maxString, numberSystemType: numberSystemType))
+        let min = LexoRank(bucket: bucket.bucket, decimal: try LexoDecimal(minString, numberSystemType: numberSystemType))
+        let max = LexoRank(bucket: bucket.bucket, decimal: try LexoDecimal(maxString, numberSystemType: numberSystemType))
 
         return try min.between(other: max)
     }
 }
 
 public struct LexoRank {
-    let bucket: LexoBucket
-    let decimal: LexoDecimal
+    public let bucket: LexoBucket
+    public let decimal: LexoDecimal
 
     public var string: String {
         return "\(bucket.id)|\(decimal.string)"
