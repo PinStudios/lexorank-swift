@@ -271,6 +271,26 @@ class LexoDecimalTests: XCTestCase {
         XCTAssertEqual(try! decimal10.next(step: 255).string, "123711:")
     }
 
+    func test_halved_returnsValidDecimal() {
+        XCTAssertEqual(try! LexoDecimal("100000", numberSystemType: .base10).halved()!.string, "050000:")
+        XCTAssertEqual(try! LexoDecimal("999999", numberSystemType: .base10).halved()!.string, "499999:")
+        XCTAssertEqual(try! LexoDecimal("000002", numberSystemType: .base10).halved()!.string, "000001:")
+        XCTAssertEqual(try! LexoDecimal("000003", numberSystemType: .base10).halved()!.string, "000001:")
+
+        XCTAssertEqual(try! LexoDecimal("100000", numberSystemType: .base36).halved()!.string, "0i0000:")
+        XCTAssertEqual(try! LexoDecimal("999999", numberSystemType: .base36).halved()!.string, "4mmmmm:")
+        XCTAssertEqual(try! LexoDecimal("000002", numberSystemType: .base36).halved()!.string, "000001:")
+        XCTAssertEqual(try! LexoDecimal("000003", numberSystemType: .base36).halved()!.string, "000001:")
+    }
+
+    func test_halvingImpossible_returnsNil() {
+        XCTAssertNil(try! LexoDecimal("000001", numberSystemType: .base10).halved())
+        XCTAssertNil(try! LexoDecimal("000000", numberSystemType: .base10).halved())
+
+        XCTAssertNil(try! LexoDecimal("000001", numberSystemType: .base36).halved())
+        XCTAssertNil(try! LexoDecimal("000000", numberSystemType: .base36).halved())
+    }
+
     func test_equal() {
         XCTAssertTrue(try LexoDecimal("123456", numberSystemType: .base36) == LexoDecimal("123456:", numberSystemType: .base36))
         XCTAssertTrue(try LexoDecimal("123456:axz", numberSystemType: .base36) == LexoDecimal("123456:axz", numberSystemType: .base36))
@@ -320,25 +340,5 @@ class LexoDecimalTests: XCTestCase {
         XCTAssertTrue(try LexoDecimal("123457", numberSystemType: .base10) > LexoDecimal("123456:123", numberSystemType: .base10))
         XCTAssertTrue(try LexoDecimal("123457:123", numberSystemType: .base10) > LexoDecimal("123456:123", numberSystemType: .base10))
         XCTAssertTrue(try LexoDecimal("123456:124", numberSystemType: .base10) > LexoDecimal("123456:123", numberSystemType: .base10))
-    }
-
-    func test_halved_returnsValidDecimal() {
-        XCTAssertEqual(try! LexoDecimal("100000", numberSystemType: .base10).halved()!.string, "050000:")
-        XCTAssertEqual(try! LexoDecimal("999999", numberSystemType: .base10).halved()!.string, "499999:")
-        XCTAssertEqual(try! LexoDecimal("000002", numberSystemType: .base10).halved()!.string, "000001:")
-        XCTAssertEqual(try! LexoDecimal("000003", numberSystemType: .base10).halved()!.string, "000001:")
-        
-        XCTAssertEqual(try! LexoDecimal("100000", numberSystemType: .base36).halved()!.string, "0i0000:")
-        XCTAssertEqual(try! LexoDecimal("999999", numberSystemType: .base36).halved()!.string, "4mmmmm:")
-        XCTAssertEqual(try! LexoDecimal("000002", numberSystemType: .base36).halved()!.string, "000001:")
-        XCTAssertEqual(try! LexoDecimal("000003", numberSystemType: .base36).halved()!.string, "000001:")
-    }
-    
-    func test_halvingImpossible_returnsNil() {
-        XCTAssertNil(try! LexoDecimal("000001", numberSystemType: .base10).halved())
-        XCTAssertNil(try! LexoDecimal("000000", numberSystemType: .base10).halved())
-        
-        XCTAssertNil(try! LexoDecimal("000001", numberSystemType: .base36).halved())
-        XCTAssertNil(try! LexoDecimal("000000", numberSystemType: .base36).halved())
     }
 }
