@@ -50,10 +50,21 @@ public struct LexoDecimal {
     }
 
     mutating func shift(_ count: Int) {
-        self.characters.append(contentsOf: Array<Character>(repeating: numberSystem.min, count: count))
+        if count > 0 {
+            self.characters.append(contentsOf: Array<Character>(repeating: numberSystem.min, count: count))
+        } else {
+            let count = abs(max(count, scale - baseScale))
+            self.characters.removeLast(count)
+        }
 
         string = String(characters)
-        string.insert(numberSystem.radixPointChar, at: string.index(string.startIndex, offsetBy: baseScale))
+        let baseScaleEndIndex = string.index(string.startIndex, offsetBy: baseScale - 1)
+
+        if let index = string.index(string.startIndex, offsetBy: baseScale, limitedBy: baseScaleEndIndex) {
+            string.insert(numberSystem.radixPointChar, at: index)
+        } else {
+            string.append(numberSystem.radixPointChar)
+        }
     }
 
     func shifting(_ count: Int) -> LexoDecimal {
@@ -120,7 +131,7 @@ public struct LexoDecimal {
 
     func next(step: UInt8) throws -> LexoDecimal {
         do {
-            return try (self + stepDecimal(step: step))
+            return try (self + stepDecimal(step: step)).shifting(baseScale - scale)
         } catch {
             throw LexoRankError.bucketOverflow
         }
@@ -128,7 +139,7 @@ public struct LexoDecimal {
 
     func prev(step: UInt8) throws -> LexoDecimal {
         do {
-            return try (self - stepDecimal(step: step))
+            return try (self - stepDecimal(step: step)).shifting(baseScale - scale)
         } catch {
             throw LexoRankError.bucketOverflow
         }

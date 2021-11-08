@@ -36,6 +36,7 @@ class LexoRankTests: XCTestCase {
             (string: "0|100000:", steps: 200, step: 8, result: "101600:", system: LexoNumberSystemType.base10),
             (string: "0|100000:", steps: 2000, step: 8, result: "116000:", system: LexoNumberSystemType.base10),
             (string: "0|100000:", steps: 200, step: 12, result: "102400:", system: LexoNumberSystemType.base10),
+            (string: "0|100000:123", steps: 200, step: 12, result: "102400:", system: LexoNumberSystemType.base10),
         ]
         
         for item in nextData {
@@ -60,6 +61,7 @@ class LexoRankTests: XCTestCase {
             (string: "0|100000:", steps: 200, step: 8, result: "098400:", system: LexoNumberSystemType.base10),
             (string: "0|100000:", steps: 2000, step: 8, result: "084000:", system: LexoNumberSystemType.base10),
             (string: "0|100000:", steps: 200, step: 12, result: "097600:", system: LexoNumberSystemType.base10),
+            (string: "0|100000:123", steps: 200, step: 12, result: "097600:", system: LexoNumberSystemType.base10),
         ]
         
         for item in prevData {

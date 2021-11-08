@@ -253,6 +253,24 @@ class LexoDecimalTests: XCTestCase {
         XCTAssertThrowsError(try decimal36c - decimal10d)
     }
 
+    func test_shifting_validValue() {
+        var decimal36 = try! LexoDecimal("123456", numberSystemType: .base36)
+
+        XCTAssertEqual(decimal36.shifting(0).string, "123456")
+        XCTAssertEqual(decimal36.shifting(2).string, "123456:00")
+        XCTAssertEqual(decimal36.shifting(4).string, "123456:0000")
+        XCTAssertEqual(decimal36.shifting(-2).string, "123456:")
+        XCTAssertEqual(decimal36.shifting(-4).string, "123456:")
+
+        decimal36 = try! LexoDecimal("123456:az", numberSystemType: .base36)
+
+        XCTAssertEqual(decimal36.shifting(0).string, "123456:az00")
+        XCTAssertEqual(decimal36.shifting(2).string, "123456:az00")
+        XCTAssertEqual(decimal36.shifting(4).string, "123456:az0000")
+        XCTAssertEqual(decimal36.shifting(-2).string, "123456:")
+        XCTAssertEqual(decimal36.shifting(-4).string, "123456:")
+    }
+
     func test_next_validValue() {
         let decimal36 = try! LexoDecimal("123456", numberSystemType: .base36)
 
