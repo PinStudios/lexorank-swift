@@ -20,7 +20,8 @@ class LexoRankTests: XCTestCase {
             return
         }
 
-        XCTAssertEqual(rank.bucket.id, "0")
+        XCTAssertEqual(rank.bucket.string, "0")
+        XCTAssertEqual(rank.bucket, .bucket0)
         XCTAssertEqual(rank.decimal.baseScale, 6)
         XCTAssertEqual(rank.decimal.numberSystemType, .base36)
         XCTAssertEqual(rank.decimal.string, "hzzzzz:")

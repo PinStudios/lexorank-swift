@@ -54,12 +54,12 @@ extension LexoRank {
     static let MIN_BASE_SCALE = 6
     static let MAX_BASE_SCALE = 10
 
-    public static func first(bucket: LexoBucketType = .bucket0, baseScale: Int = 6, numberSystemType: LexoNumberSystemType = .base36) throws -> LexoRank {
+    public static func first(bucket: LexoBucket = .bucket0, baseScale: Int = 6, numberSystemType: LexoNumberSystemType = .base36) throws -> LexoRank {
         let minString = String(Array<Character>(repeating: numberSystemType.numberSystem.min, count: baseScale))
         let maxString = String(Array<Character>(repeating: numberSystemType.numberSystem.max, count: baseScale))
 
-        let min = LexoRank(bucket: bucket.bucket, decimal: try LexoDecimal(minString, numberSystemType: numberSystemType))
-        let max = LexoRank(bucket: bucket.bucket, decimal: try LexoDecimal(maxString, numberSystemType: numberSystemType))
+        let min = LexoRank(bucket: bucket, decimal: try LexoDecimal(minString, numberSystemType: numberSystemType))
+        let max = LexoRank(bucket: bucket, decimal: try LexoDecimal(maxString, numberSystemType: numberSystemType))
 
         return try min.between(other: max)
     }
@@ -70,14 +70,14 @@ public struct LexoRank {
     public let decimal: LexoDecimal
 
     public var string: String {
-        return "\(bucket.id)|\(decimal.string)"
+        return "\(bucket.string)|\(decimal.string)"
     }
 
     public init(_ string: String, numberSystemType: LexoNumberSystemType = .base36) throws {
         guard case let parts = string.split(separator: "|"),
               parts.count == 2,
               let bucketId = parts.first?.first,
-              let bucket = LexoBucket.findById(bucketId) else {
+              let bucket = LexoBucket(rawValue: bucketId) else {
             throw LexoRankError.bucketMissing
         }
 
