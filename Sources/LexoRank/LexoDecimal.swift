@@ -303,3 +303,9 @@ extension LexoDecimal {
         return scaleMatched.lhs.string != scaleMatched.rhs.string
     }
 }
+
+extension LexoDecimal: CustomStringConvertible {
+    public var description: String {
+        return string
+    }
+}

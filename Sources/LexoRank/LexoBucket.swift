@@ -27,3 +27,9 @@ public enum LexoBucket: Character, CaseIterable, Equatable {
         }
     }
 }
+
+extension LexoBucket: CustomStringConvertible {
+    public var description: String {
+        return string
+    }
+}
