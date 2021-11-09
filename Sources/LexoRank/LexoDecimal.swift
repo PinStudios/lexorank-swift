@@ -53,18 +53,12 @@ public struct LexoDecimal {
         if count > 0 {
             self.characters.append(contentsOf: Array<Character>(repeating: numberSystem.min, count: count))
         } else {
-            let count = abs(max(count, scale - baseScale))
+            let count = min(abs(count), scale - baseScale)
             self.characters.removeLast(count)
         }
 
         string = String(characters)
-        let baseScaleEndIndex = string.index(string.startIndex, offsetBy: baseScale - 1)
-
-        if let index = string.index(string.startIndex, offsetBy: baseScale, limitedBy: baseScaleEndIndex) {
-            string.insert(numberSystem.radixPointChar, at: index)
-        } else {
-            string.append(numberSystem.radixPointChar)
-        }
+        string.insert(numberSystem.radixPointChar, at: string.index(string.startIndex, offsetBy: baseScale))
     }
 
     func shifting(_ count: Int) -> LexoDecimal {

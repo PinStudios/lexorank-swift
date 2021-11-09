@@ -47,7 +47,7 @@ class LexoRankTests: XCTestCase {
                     rank = try rank.next(step: UInt8(item.step))
                 }
 
-                XCTAssertEqual(rank.decimal.string, item.result)
+                XCTAssertEqual(rank.decimal.string, item.result, "test case: \"\(item)\"")
             } catch {
                 XCTFail()
             }
@@ -72,7 +72,7 @@ class LexoRankTests: XCTestCase {
                     rank = try rank.prev(step: UInt8(item.step))
                 }
 
-                XCTAssertEqual(rank.decimal.string, item.result)
+                XCTAssertEqual(rank.decimal.string, item.result, "test case: \"\(item)\"")
             } catch {
                 XCTFail()
             }
@@ -171,7 +171,7 @@ class LexoRankTests: XCTestCase {
                     flexRank = try fixedRank.between(other: flexRank)
                 }
                 
-                XCTAssertEqual(flexRank.decimal.string, item.result)
+                XCTAssertEqual(flexRank.decimal.string, item.result, "test case: \"\(item)\"")
             } catch {
                 XCTFail()
             }
