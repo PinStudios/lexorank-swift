@@ -125,6 +125,10 @@ class LexoRankTests: XCTestCase {
     
     func test_between_matchesExpectation() {
         let betweenData = [
+            //string1 == string2
+            (string1: "0|000100:", string2: "0|000100:", steps: 1, system: LexoNumberSystemType.base10, result: "000100:5"),
+            (string1: "0|000100:43", string2: "0|000100:43", steps: 1, system: LexoNumberSystemType.base10, result: "000100:435"),
+
             //string1 < string2
             (string1: "0|000100:", string2: "0|000200:", steps: 1, system: LexoNumberSystemType.base10, result: "000150:"),
             (string1: "0|000100:", string2: "0|000200:", steps: 2, system: LexoNumberSystemType.base10, result: "000125:"),
