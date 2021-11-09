@@ -102,13 +102,13 @@ public struct LexoRank {
         return LexoRank(bucket: bucket, decimal: newDecimal)
     }
 
-    public func next(step: UInt8 = 8) throws -> LexoRank {
+    public func next(step: UInt = 8) throws -> LexoRank {
         let newDecimal = try decimal.next(step: step)
 
         return LexoRank(bucket: bucket, decimal: newDecimal)
     }
 
-    public func prev(step: UInt8 = 8) throws -> LexoRank {
+    public func prev(step: UInt = 8) throws -> LexoRank {
         let newDecimal = try decimal.prev(step: step)
 
         return LexoRank(bucket: bucket, decimal: newDecimal)

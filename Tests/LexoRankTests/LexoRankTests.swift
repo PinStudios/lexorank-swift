@@ -44,7 +44,7 @@ class LexoRankTests: XCTestCase {
                 var rank = try LexoRank(item.string, numberSystemType: item.system)
 
                 for _ in stride(from: 0, to: item.steps, by: 1) {
-                    rank = try rank.next(step: UInt8(item.step))
+                    rank = try rank.next(step: UInt(item.step))
                 }
 
                 XCTAssertEqual(rank.decimal.string, item.result, "Test case: \"\(item)\"")
@@ -69,7 +69,7 @@ class LexoRankTests: XCTestCase {
                 var rank = try LexoRank(item.string, numberSystemType: item.system)
 
                 for _ in stride(from: 0, to: item.steps, by: 1) {
-                    rank = try rank.prev(step: UInt8(item.step))
+                    rank = try rank.prev(step: UInt(item.step))
                 }
 
                 XCTAssertEqual(rank.decimal.string, item.result, "Test case: \"\(item)\"")
@@ -91,10 +91,10 @@ class LexoRankTests: XCTestCase {
                 var rank = try LexoRank(item.string, numberSystemType: item.system)
 
                 for _ in stride(from: 0, to: item.steps - 1, by: 1) {
-                    rank = try rank.next(step: UInt8(item.step))
+                    rank = try rank.next(step: UInt(item.step))
                 }
                 
-                XCTAssertThrowsError(try rank.next(step: UInt8(item.step)))
+                XCTAssertThrowsError(try rank.next(step: UInt(item.step)))
             } catch {
                 XCTFail()
             }
@@ -113,10 +113,10 @@ class LexoRankTests: XCTestCase {
                 var rank = try LexoRank(item.string, numberSystemType: item.system)
 
                 for _ in stride(from: 0, to: item.steps - 1, by: 1) {
-                    rank = try rank.prev(step: UInt8(item.step))
+                    rank = try rank.prev(step: UInt(item.step))
                 }
                 
-                XCTAssertThrowsError(try rank.prev(step: UInt8(item.step)))
+                XCTAssertThrowsError(try rank.prev(step: UInt(item.step)))
             } catch {
                 XCTFail()
             }

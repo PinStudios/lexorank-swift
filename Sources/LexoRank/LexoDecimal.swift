@@ -123,7 +123,7 @@ public struct LexoDecimal {
         }
     }
 
-    func next(step: UInt8) throws -> LexoDecimal {
+    func next(step: UInt) throws -> LexoDecimal {
         do {
             return try (self + stepDecimal(step: step)).shifting(baseScale - scale)
         } catch {
@@ -131,7 +131,7 @@ public struct LexoDecimal {
         }
     }
 
-    func prev(step: UInt8) throws -> LexoDecimal {
+    func prev(step: UInt) throws -> LexoDecimal {
         do {
             return try (self - stepDecimal(step: step)).shifting(baseScale - scale)
         } catch {
@@ -139,7 +139,7 @@ public struct LexoDecimal {
         }
     }
 
-    func stepDecimal(step: UInt8) throws -> LexoDecimal {
+    func stepDecimal(step: UInt) throws -> LexoDecimal {
         guard case let stepChars = numberSystem.toString(UInt(step)), stepChars.count > 0 else {
             throw LexoRankError.unknownError
         }
