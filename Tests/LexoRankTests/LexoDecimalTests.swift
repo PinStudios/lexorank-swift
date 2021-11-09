@@ -85,7 +85,7 @@ class LexoDecimalTests: XCTestCase {
 
     func test_initWithCorrectScale_matchesBaseScale() {
         for item in data {
-            XCTAssertEqual(try LexoDecimal(item.string, numberSystemType: item.numberSystemType).baseScale, item.baseScale)
+            XCTAssertEqual(try LexoDecimal(item.string, numberSystemType: item.numberSystemType).baseScale, item.baseScale, "Test case: \"\(item)\"")
         }
     }
     
@@ -97,13 +97,13 @@ class LexoDecimalTests: XCTestCase {
     
     func test_init_correctScale() {
         for item in data {
-            XCTAssertEqual(try LexoDecimal(item.string, numberSystemType: item.numberSystemType).scale, item.scale)
+            XCTAssertEqual(try LexoDecimal(item.string, numberSystemType: item.numberSystemType).scale, item.scale, "Test case: \"\(item)\"")
         }
     }
     
     func test_performShift_correctScale() {
         for item in data {
-            XCTAssertEqual(try LexoDecimal(item.string, numberSystemType: item.numberSystemType).shifting(10).scale, item.scale + 10)
+            XCTAssertEqual(try LexoDecimal(item.string, numberSystemType: item.numberSystemType).shifting(10).scale, item.scale + 10, "Test case: \"\(item)\"")
         }
     }
 
