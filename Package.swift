@@ -5,18 +5,27 @@ import PackageDescription
 
 let package = Package(
     name: "LexoRank",
-    platforms: [.iOS(.v10), .macOS(.v10_10), .tvOS(.v10)],
+    platforms: [
+        .iOS(.v10),
+        .macOS(.v10_11),
+        .tvOS(.v10),
+        .watchOS(.v3)
+    ],
     products: [
         .library(
             name: "LexoRank",
-            targets: ["LexoRank"]),
+            targets: ["LexoRank"]
+        ),
     ],
     targets: [
         .target(
             name: "LexoRank",
-            dependencies: []),
+            dependencies: []
+        ),
         .testTarget(
             name: "LexoRankTests",
-            dependencies: ["LexoRank"]),
-    ]
+            dependencies: ["LexoRank"]
+        ),
+    ],
+    swiftLanguageVersions: [.v5]
 )
