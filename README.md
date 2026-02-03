@@ -17,6 +17,65 @@ LexoRank generates sortable string values that can be positioned between any two
 
 With a default configuration (baseScale 6, base36, step 8), a single bucket can hold approximately **260 million unique ranks**.
 
+This package has successfully been used in production by [HyperDo: Focus Booster & Detox App](https://apps.apple.com/app/id1564457070) for managing task lists and other ordered collections.
+
+### The Problem with Traditional Ordering
+
+When building apps with reorderable lists (task managers, playlists, kanban boards), you need to persist the order. The naive approach uses integer positions:
+
+```
+| id | title        | position |
+|----|--------------|----------|
+| 1  | Buy groceries| 1        |
+| 2  | Walk the dog | 2        |
+| 3  | Write report | 3        |
+```
+
+**The problem:** Moving "Write report" to the top requires updating _every_ item's position:
+
+```sql
+-- Move item 3 to position 1
+UPDATE tasks SET position = position + 1 WHERE position >= 1;
+UPDATE tasks SET position = 1 WHERE id = 3;
+```
+
+This O(n) operation becomes expensive with large lists and creates race conditions in collaborative apps where multiple users reorder simultaneously.
+
+### How LexoRank Solves This
+
+LexoRank uses lexicographically sortable strings instead of integers. You can always generate a string that sorts between any two existing strings:
+
+```
+| id | title        | rank       |
+|----|--------------|------------|
+| 1  | Buy groceries| 0|hzzzzz:  |
+| 2  | Walk the dog | 0|i00007:  |
+| 3  | Write report | 0|i0000e:  |
+```
+
+**Moving "Write report" to the top** only updates one row:
+
+```swift
+// Find a rank that comes before "Buy groceries"
+let newRank = try buyGroceriesRank.prev()  // "0|hzzzzr:"
+// Update only the moved item
+task3.rank = newRank.string
+```
+
+```sql
+UPDATE tasks SET rank = '0|hzzzzr:' WHERE id = 3;
+```
+
+**Inserting between two items** is equally simple:
+
+```swift
+// Insert between "Buy groceries" (0|hzzzzz:) and "Walk the dog" (0|i00007:)
+let middleRank = try buyGroceriesRank.between(other: walkDogRank)
+// Result: "0|i00003:i" - sorts after hzzzzz: but before i00007:
+```
+
+This O(1) operation works regardless of list size and is safe for concurrent updates since each move only touches one record.
+
 ## Installation
 
 ### Swift Package Manager
